@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/UI Pages/Main Page/Main Page.unity
-  isLoaded: 1
-  isActive: 1
