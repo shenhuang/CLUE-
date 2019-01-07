@@ -8,8 +8,10 @@ process.on('message', (type, socket) =>
 	if (type == 'socket')
 	{
 		if (socket)
-		{				
-			socket.on('data', function (msg) {
+		{
+			fs.mkdir(__dirname + '/SCREENSHOTS', { recursive: true }, (err) => {
+				if (err) throw err;
+			});			socket.on('data', function (msg) {
 				if(msg + "" == "end-screenshot-sending")
 				{
 					process.send('socket', socket);
@@ -23,7 +25,7 @@ process.on('message', (type, socket) =>
 					}
 					else if(msg + "" == "long-byte-end")
 					{
-						fs.writeFile("screenshot" + count, buffer, (err) => {
+						fs.writeFile(__dirname + "/SCREENSHOTS/screenshot" + count, buffer, (err) => {
 							if (err) throw err;
 						});
 						count++;

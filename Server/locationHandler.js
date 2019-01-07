@@ -8,6 +8,9 @@ process.on('message', (type, socket) =>
 	{
 		if (socket)
 		{
+			fs.mkdir(__dirname + '/LOCATIONS', { recursive: true }, (err) => {
+				if (err) throw err;
+			});
 			socket.on('data', function (msg) {
 				if(msg + "" == "end-location-sending")
 				{
@@ -15,7 +18,7 @@ process.on('message', (type, socket) =>
 				}
 				else
 				{
-					fs.writeFile("location" + count, msg + "", (err) => {
+					fs.writeFile(__dirname + "/LOCATIONS/location" + count, msg + "", (err) => {
 						if (err) throw err;
 					});
 					count++;

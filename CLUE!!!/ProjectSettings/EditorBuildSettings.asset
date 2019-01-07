@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/UI Pages/Main Page/Main Page.unity
+    guid: 9c72bcb7129f9413cadae468a54fd839
+  - enabled: 1
+    path: Assets/UI Pages/Create Game Pages/Add Clue Page/Add Clue Page.unity
+    guid: d9966157059e744989880c039038af1b
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/UI Pages/Create Game Pages/Take Picture Page/Take Picture Page.unity
+    guid: 4cb40498f8b3c4b48814d6f097d1f300
+  - enabled: 1
+    path: Assets/UI Pages/Create Game Pages/Confirm Picture Page/Confirm Picture Page.unity
+    guid: 9fbc692e97edd4642a9761a75d2ae94e
+  - enabled: 1
+    path: Assets/UI Pages/Create Game Pages/View Clues Page/View Clues Page.unity
+    guid: 694d28b3db8a6498b89a33aa119b21b2
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/UI Pages/Create Game Pages/Send Clues Page/Send Clues Page.unity
+    guid: e152a86420f394e7c9ea008041f1afb1
+  - enabled: 1
+    path: Assets/UI Pages/Play Game Pages/Enter Code Page/Enter Code Page.unity
+    guid: d735a6e22580542cfb636732574d7885
+  m_configObjects: {}
