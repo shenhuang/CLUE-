@@ -29,7 +29,6 @@ public class FileIO : MonoBehaviour
         if (!Directory.Exists(Application.dataPath + "/CLUES/"))
         {
             Directory.CreateDirectory(Application.dataPath + "/CLUES/");
-
         }
         try
         {

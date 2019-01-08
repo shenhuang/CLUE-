@@ -54,7 +54,6 @@ public class LBSControl : MonoBehaviour
                         case TouchPhase.Moved:
                             zoomFactor = Mathf.Pow((Vector3.Distance(touchOnePoint, touchTwoPoint) / touchInitialDistance), zoomScale);
                             transform.position = new Vector3(initialPosition.x + (touchOnePoint.x + touchTwoPoint.x) / 2 - touchInitialPosition.x, initialPosition.y + (touchOnePoint.y + touchTwoPoint.y) / 2 - touchInitialPosition.y, initialPosition.z);
-                            Debug.Log(zoomFactor);
                             break;
                         case TouchPhase.Ended:
                             zoomFactor = Mathf.Pow((Vector3.Distance(touchOnePoint, touchTwoPoint) / touchInitialDistance), zoomScale);
@@ -62,6 +61,7 @@ public class LBSControl : MonoBehaviour
                             break;
                     }
                     float zoomAmount = abstractMap.Zoom * zoomFactor;
+                    Debug.Log(zoomAmount);
                     if(zoomAmount > maxZoom)
                     {
                         zoomAmount = maxZoom;
