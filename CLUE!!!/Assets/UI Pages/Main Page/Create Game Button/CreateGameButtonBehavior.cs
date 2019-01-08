@@ -6,7 +6,7 @@ public class CreateGameButtonBehavior : ButtonBehaviour
     public FileIO fileIO;
     public override void onClick()
     {
-        //fileIO.FileWrite("0", "cluecount");
+        fileIO.FileWrite("0", "cluecount");
         UnityEngine.SceneManagement.SceneManager.LoadScene("Add Clue Page");
     }
     public override void onHover()

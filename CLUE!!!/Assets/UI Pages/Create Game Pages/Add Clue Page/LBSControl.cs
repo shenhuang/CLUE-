@@ -61,7 +61,6 @@ public class LBSControl : MonoBehaviour
                             break;
                     }
                     float zoomAmount = abstractMap.Zoom * zoomFactor;
-                    Debug.Log(zoomAmount);
                     if(zoomAmount > maxZoom)
                     {
                         zoomAmount = maxZoom;

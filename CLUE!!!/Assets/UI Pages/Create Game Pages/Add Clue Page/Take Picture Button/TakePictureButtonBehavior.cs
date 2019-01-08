@@ -10,7 +10,7 @@ public class TakePictureButtonBehavior : ButtonBehaviour
         string cluecountstring = fileIO.FileRead("cluecount");
         LBSControl lbscb = lbsControl.GetComponent<LBSControl>();
         fileIO.FileWrite(lbscb.longitude + "\n" + lbscb.latitude, "location" + cluecountstring);
-        ScreenCapture.CaptureScreenshot(Application.dataPath + "/CLUES/locationScreenshot" + cluecountstring);
+        ScreenCapture.CaptureScreenshot(Application.dataPath + "/CLUES/tempLocationScreenshot");
         Input.location.Stop();
         UnityEngine.SceneManagement.SceneManager.LoadScene("Take Picture Page");
     }

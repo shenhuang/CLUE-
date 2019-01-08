@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class ClueDisplayControl : MonoBehaviour
 {
@@ -56,7 +56,6 @@ public class ClueDisplayControl : MonoBehaviour
                     break;
                 case TouchPhase.Moved:
                     transform.position = new Vector3(transform.position.x, transform.position.y + touchPoint.y - touchPreviousPosition.y, transform.position.z);
-                    Debug.Log(touchPoint.y - touchPreviousPosition.y);
                     touchPreviousPosition = touchPoint;
                     break;
                 case TouchPhase.Ended:

@@ -161,7 +161,7 @@ Prefab:
         type: 2}
       propertyPath: lbsControl
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2020612264}
     - target: {fileID: 114310216179673770, guid: aff3d797ed710474bbe3fcce117156f9,
         type: 2}
       propertyPath: fileIO

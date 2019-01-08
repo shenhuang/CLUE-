@@ -6,16 +6,13 @@ var namecardCount = 0;
 
 const server = require('net').createServer({ pauseOnConnect: true });
 
-var AWS = require("aws-sdk");
-AWS.config.update({
-	region: "us-west-2",
-	endpoint: "http://localhost:8000"
-});
-
 server.on('connection', (socket) => {
-	socket.clueHandler = fork('clueHandler.js');
 	socket.namecard = namecardCount;
 	console.log("A client has connected, assigned a namecard: " + socket.namecard);
+	socket.clueHandler = fork('clueHandler.js');
+	console.log("Client with namecard " + socket.namecard + " is handled by clue handler " + socket.clueHandler.pid);
+	clients.push(socket);
+	
 	namecardCount++;
 	socket.on('end', function () {
 		socket.clueHandler.kill();
@@ -23,13 +20,13 @@ server.on('connection', (socket) => {
 		clients.splice(i, 1);
 	});
 	socket.clueHandler.send('socket', socket);	//Handles clue sending.
-	clients.push(socket);
 	socket.clueHandler.on('message', (type, complete) =>
 	{
 		if (type == 'socket')
 		{
 			if (complete)
 			{
+				console.log("A clue has been uploaded, returning namecard: " + socket.namecard);
 				complete.write("valid-clues-namecard: " + socket.namecard);
 				complete.on('end', function () {
 					socket.clueHandler.kill();

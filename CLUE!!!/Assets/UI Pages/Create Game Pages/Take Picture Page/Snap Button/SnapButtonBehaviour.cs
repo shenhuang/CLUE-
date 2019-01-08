@@ -1,18 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEngine;
 
-public class SnapButtonBehaviour : ButtonBehaviour {
-    public FileIO fileIO;
+public class SnapButtonBehaviour : ButtonBehaviour
+{
     public override void onClick()
     {
-        //string cluecount = fileIO.FileRead("cluecount");
-        string cluecount = "0";
-        Debug.Log("clueScreenshot" + cluecount);
-        ScreenCapture.CaptureScreenshot(Application.dataPath + "/CLUES/clueScreenshot" + cluecount);
-        Texture2D screenshot = new Texture2D(0, 0);
-        screenshot.LoadImage(fileIO.FileReadBytes(Application.dataPath + "/CLUES/clueScreenshot" + cluecount));
-
+        ScreenCapture.CaptureScreenshot(Application.dataPath + "/CLUES/tempClueScreenshot");
         UnityEngine.SceneManagement.SceneManager.LoadScene("Confirm Picture Page");
     }
     public override void onHover()
