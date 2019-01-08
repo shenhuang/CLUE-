@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/UI Pages/Main Page/Main Page.unity
+- path: Assets/UI Pages/Create Game Pages/Send Clues Page/Send Clues Page.unity
   isLoaded: 1
   isActive: 1

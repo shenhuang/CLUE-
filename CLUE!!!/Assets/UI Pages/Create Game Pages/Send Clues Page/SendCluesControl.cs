@@ -1,5 +1,3 @@
-using System;
-using System.Text;
 using UnityEngine;
 
 public class SendCluesControl : MonoBehaviour
@@ -8,21 +6,24 @@ public class SendCluesControl : MonoBehaviour
     public NetworkIO networkIO;
     public FileIO fileIO;
 
-    void Start()
-    {
-        networkIO.Connect();
-        SendClues();
-        WaitForReferenceCode();
-    }
+    private bool clueSent;
 
-    void Update()
+    void Start()
     {
         
     }
 
-    void onReceiveMessage(string message)
+    void Update()
     {
-        Debug.Log(message);
+        if(!clueSent)
+        {
+            Debug.Log("Sending Clues!");
+            networkIO.Connect();
+            SendClues();
+            WaitForReferenceCode();
+            networkIO.Disconnect();
+            clueSent = true;
+        }
     }
 
     void SendClues()

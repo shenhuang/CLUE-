@@ -8,8 +8,8 @@ public class NetworkIO : MonoBehaviour
     TcpClient tcpClient;
     NetworkStream serverStream;
 
-    public string host = "localhost";
-    public int port = 3000;
+    public string host;
+    public int port;
     const float waitTimeOut = 5;
 
 	public void Connect()

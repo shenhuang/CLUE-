@@ -1,14 +1,9 @@
 ﻿<Properties StartupConfiguration="{14F50177-A699-628B-70F6-03C8CC929B07}|">
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/IO/NetworkIO.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/UI Pages/Create Game Pages/Send Clues Page/SendCluesControl.cs">
     <Files>
-      <File FileName="Assets/UI Pages/Create Game Pages/Send Clues Page/SendCluesControl.cs" Line="14" Column="21" />
-      <File FileName="Assets/IO/NetworkIO.cs" Line="11" Column="39" />
-      <File FileName="Assets/UI Pages/Main Page/Join Game Button/JoinGameButtonBehaviour.cs" Line="5" Column="34" />
-      <File FileName="Assets/UI Components/Buttons/ButtonBehavior.cs" Line="12" Column="9" />
-      <File FileName="Assets/UI Pages/Create Game Pages/View Clues Page/ClueDisplayControl.cs" Line="35" Column="13" />
-      <File FileName="Assets/UI Pages/Create Game Pages/Add Clue Page/LBSControl.cs" Line="24" Column="3" />
-      <File FileName="Assets/UI Pages/Create Game Pages/Add Clue Page/Take Picture Button/TakePictureButtonBehavior.cs" Line="12" Column="1" />
+      <File FileName="Assets/UI Pages/Create Game Pages/Send Clues Page/SendCluesControl.cs" Line="14" Column="6" />
+      <File FileName="Assets/IO/NetworkIO.cs" Line="12" Column="20" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

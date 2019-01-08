@@ -6,9 +6,16 @@ var namecardCount = 0;
 
 const server = require('net').createServer({ pauseOnConnect: true });
 
+var AWS = require("aws-sdk");
+AWS.config.update({
+	region: "us-west-2",
+	endpoint: "http://localhost:8000"
+});
+
 server.on('connection', (socket) => {
 	socket.clueHandler = fork('clueHandler.js');
 	socket.namecard = namecardCount;
+	console.log("A client has connected, assigned a namecard: " + socket.namecard);
 	namecardCount++;
 	socket.on('end', function () {
 		socket.clueHandler.kill();
@@ -45,4 +52,4 @@ process.on('SIGINT', function () {
 	process.exit(0);
 });
 
-console.log("Server listening to: " + server.address().address + ":" + server.address().port);
+console.log("Server listening to: " + server.address().port);
