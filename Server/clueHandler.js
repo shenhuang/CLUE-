@@ -5,6 +5,7 @@ var locationCount;
 var screenshotCount;
 
 var fs = require('fs');
+var dbHandler = require('./dbHandler');
 var rimraf = require("rimraf");
 
 console.log("Created clue handler " + process.pid);
@@ -57,35 +58,39 @@ screenshotHandler.on('message', (type, socket) =>
 		if (socket)
 		{
 			socket.on('data', function (msg) {
-				var locations = [];
-				var screenshots = [];
-				var locationsCount = 0;
-				var screenshotsCount = 0;
-				while(fs.existsSync(__dirname + '/' + locationHandler.pid + "/location" + locationsCount))
+				if(msg == "end-clue-sending")
 				{
-					var data = fs.readFileSync(__dirname + '/' + locationHandler.pid + "/location" + locationsCount);
-					locations.push(data + "");
-					locationsCount++;
-				}
-				while(fs.existsSync(__dirname + '/' + screenshotHandler.pid + "/screenshot" + screenshotsCount))
-				{
-					var data = fs.readFileSync(__dirname + '/' + screenshotHandler.pid + "/screenshot" + screenshotsCount);
-					if(data.length < 350000)
+					var locations = [];
+					var screenshots = [];
+					var locationsCount = 0;
+					var screenshotsCount = 0;
+					while(fs.existsSync(__dirname + '/' + locationHandler.pid + "/location" + locationsCount))
 					{
-						screenshots.push(data);
-						screenshotsCount++;
+						var data = fs.readFileSync(__dirname + '/' + locationHandler.pid + "/location" + locationsCount);
+						locations.push(data + "");
+						locationsCount++;
+					}
+					while(fs.existsSync(__dirname + '/' + screenshotHandler.pid + "/screenshot" + screenshotsCount))
+					{
+						var data = fs.readFileSync(__dirname + '/' + screenshotHandler.pid + "/screenshot" + screenshotsCount);
+						if(data.length < 350000)
+						{
+							screenshots.push(data);
+							screenshotsCount++;
+						}
+					}
+					rimraf.sync(__dirname + '/' + locationHandler.pid);
+					rimraf.sync(__dirname + '/' + screenshotHandler.pid);
+					locationHandler.kill();
+					screenshotHandler.kill();
+					if(locationsCount == screenshotsCount)
+					{
+						var reference = dbHandler.getClueReferenceCode();
+						var references = dbHandler.storeLocations(locations, reference);
+						dbHandler.storeScreenShots(screenshots, references);
 					}
 				}
-				rimraf.sync(__dirname + '/' + locationHandler.pid);
-				rimraf.sync(__dirname + '/' + screenshotHandler.pid);
-				locationHandler.kill();
-				screenshotHandler.kill();
-				if(locationsCount == screenshotsCount)
-				{
-
-				}
-				//Send the socket back to server, the clue is valid if it is stored.
-
+				socket.write("failed-to-update-clues");
 				process.send('socket', socket);
 			});
 			socket.write("ready-for-next-segment");
