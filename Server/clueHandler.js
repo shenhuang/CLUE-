@@ -1,16 +1,14 @@
 const {fork} = require('child_process');
+const fs = require('fs');
 const locationHandler = fork('locationHandler.js');
 const screenshotHandler = fork('screenshotHandler.js');
+PrepareClueSending();
 var locationCount;
 var screenshotCount;
-
-var fs = require('fs');
+var referenceCodeHandler = require('./referenceCodeHandler');
 var dbHandler = require('./dbHandler');
+var s3Handler = require('./s3Handler')
 var rimraf = require("rimraf");
-
-console.log("Created clue handler " + process.pid);
-console.log("The clue handler " + process.pid + " is handled by location handler " + locationHandler.pid);
-console.log("The clue handler " + process.pid + " is handled by screenshot handler " + screenshotHandler.pid);
 
 process.on('message', (type, socket) =>
 {
@@ -72,28 +70,79 @@ screenshotHandler.on('message', (type, socket) =>
 					}
 					while(fs.existsSync(__dirname + '/' + screenshotHandler.pid + "/screenshot" + screenshotsCount))
 					{
-						var data = fs.readFileSync(__dirname + '/' + screenshotHandler.pid + "/screenshot" + screenshotsCount);
-						if(data.length < 350000)
-						{
-							screenshots.push(data);
-							screenshotsCount++;
-						}
+						var path = __dirname + '/' + screenshotHandler.pid + "/screenshot" + screenshotsCount;
+						screenshots.push(path);
+						screenshotsCount++;
 					}
-					rimraf.sync(__dirname + '/' + locationHandler.pid);
-					rimraf.sync(__dirname + '/' + screenshotHandler.pid);
-					locationHandler.kill();
-					screenshotHandler.kill();
 					if(locationsCount == screenshotsCount)
 					{
-						var reference = dbHandler.getClueReferenceCode();
-						var references = dbHandler.storeLocations(locations, reference);
-						dbHandler.storeScreenShots(screenshots, references);
+						StoreClues(locations, screenshots, socket);
+					}
+					else
+					{
+						socket.write("clue-count-mismatch");
+						EndClueSending(socket);
 					}
 				}
-				socket.write("failed-to-update-clues");
-				process.send('socket', socket);
+				else
+				{
+					socket.write("incorrect-connection-format");
+					EndClueSending(socket);
+				}
 			});
 			socket.write("ready-for-next-segment");
 		}
 	}
 });
+
+locationHandler.on('exit', function (code, signal) {
+	console.log("Process terminated unexpectedly!");
+	EndClueSending(null);
+});
+
+screenshotHandler.on('exit', function (code, signal) {
+	console.log("Process terminated unexpectedly!");
+	EndClueSending(null);
+});
+
+function StoreClues(locations, screenshots, socket)
+{
+	var getClueReferenceCode = referenceCodeHandler.getClueReferenceCode(function(output) {
+		var reference = output;
+		var storeClues = dbHandler.storeClues(locations, reference, function(output) {
+			var references = output;
+			s3Handler.storeScreenShots(screenshots, references, function()
+			{
+				console.log("A clue has been uploaded with reference: " + reference);
+				socket.write("clue-saved-correctly-with-reference: " + reference);
+				EndClueSending(socket);
+			});
+		});
+	});
+}
+
+function PrepareClueSending()
+{
+	console.log("Created clue handler " + process.pid);
+	console.log("The clue handler " + process.pid + " is handled by location handler " + locationHandler.pid);
+	console.log("Creating directory to store locations: " + __dirname + '/' + locationHandler.pid);
+	fs.mkdir(__dirname + '/' + locationHandler.pid, { recursive: true }, (err) => {
+		if (err) throw err;
+	});
+	console.log("The clue handler " + process.pid + " is handled by screenshot handler " + screenshotHandler.pid);
+	console.log("Creating directory to store screenshots: " + __dirname + '/' + screenshotHandler.pid);
+	fs.mkdir(__dirname + '/' + screenshotHandler.pid, { recursive: true }, (err) => {
+		if (err) throw err;
+	});
+}
+
+function EndClueSending(socket)
+{
+	rimraf.sync(__dirname + '/' + locationHandler.pid);
+	rimraf.sync(__dirname + '/' + screenshotHandler.pid);
+	console.log("Removed local locations files from: " + __dirname + '/' + locationHandler.pid);
+	console.log("Removed local screenshots files from: " + __dirname + '/' + screenshotHandler.pid);
+	locationHandler.kill();
+	screenshotHandler.kill();
+	process.send('socket', socket);
+}

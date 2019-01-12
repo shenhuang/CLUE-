@@ -6,23 +6,33 @@ public class SendCluesControl : MonoBehaviour
     public NetworkIO networkIO;
     public FileIO fileIO;
 
-    private bool clueSent;
+    int phase;
 
     void Start()
     {
-        
+        phase = 0;
+        networkIO.Connect();
+        SendClues();
+        WaitForReferenceCode();
+        networkIO.Disconnect();
     }
 
     void Update()
     {
-        if(!clueSent)
+        switch(phase)
         {
-            Debug.Log("Sending Clues!");
-            networkIO.Connect();
-            SendClues();
-            WaitForReferenceCode();
-            networkIO.Disconnect();
-            clueSent = true;
+            case 0:
+                
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
         }
     }
 

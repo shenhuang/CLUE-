@@ -26,7 +26,6 @@ server.on('connection', (socket) => {
 		{
 			if (complete)
 			{
-				console.log("A clue has been uploaded!");
 				complete.on('end', function () {
 					socket.clueHandler.kill();
 					var i = clients.indexOf(socket);

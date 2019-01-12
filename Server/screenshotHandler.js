@@ -10,9 +10,7 @@ process.on('message', (type, socket) =>
 		if (socket)
 		{
 			console.log("Storing screenshots into: " + __dirname + '/' + process.pid);
-			fs.mkdir(__dirname + '/' + process.pid, { recursive: true }, (err) => {
-				if (err) throw err;
-			});			socket.on('data', function (msg) {
+			socket.on('data', function (msg) {
 				if(msg + "" == "end-screenshot-sending")
 				{
 					process.send('socket', socket);

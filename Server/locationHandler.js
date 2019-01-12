@@ -9,9 +9,6 @@ process.on('message', (type, socket) =>
 		if (socket)
 		{
 			console.log("Storing locations into: " + __dirname + '/' + process.pid);
-			fs.mkdir(__dirname + '/' + process.pid, { recursive: true }, (err) => {
-				if (err) throw err;
-			});
 			socket.on('data', function (msg) {
 				if(msg + "" == "end-location-sending")
 				{

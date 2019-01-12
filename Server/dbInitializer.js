@@ -1,4 +1,5 @@
 var AWS = require("aws-sdk");
+var uuid = require('uuid');
 
 AWS.config.update({
   region: "us-west-2",
@@ -9,7 +10,6 @@ console.log("Initializing DynamoDB for the game CLUE!!!");
 
 CreateReferenceCodesTable();
 CreateCLUESTable();
-CreateScreenshotsTable();
 
 function CreateReferenceCodesTable()
 {
@@ -17,25 +17,25 @@ function CreateReferenceCodesTable()
     var dynamodb = new AWS.DynamoDB();
     var params = {
         TableName : "Reference_Codes",
-        KeySchema: [
-            { AttributeName: "title", KeyType: "HASH" }
+        KeySchema : [
+            { AttributeName : "title", KeyType: "HASH" }
         ],
-        AttributeDefinitions: [
+        AttributeDefinitions : [
             { AttributeName: "title", AttributeType: "S" }
         ],
-        ProvisionedThroughput: {
-            ReadCapacityUnits: 100, 
-            WriteCapacityUnits: 100
+        ProvisionedThroughput : {
+            ReadCapacityUnits : 100, 
+            WriteCapacityUnits : 100
         }
     };
 
     dynamodb.createTable(params, function(err, data) {
         if (err) {
-            console.error("Unable to create table. Error JSON:", JSON.stringify(err, null, 2));
+            console.error("Unable to create Reference_Codes table. Error JSON:", JSON.stringify(err, null, 2));
             if(err.message == "Cannot create preexisting table")
                 InitializeReferenceCodes();
         } else {
-            console.log("Created table. Table description JSON:", JSON.stringify(data, null, 2));
+            console.log("Created Reference_Codes table. Table description JSON:", JSON.stringify(data, null, 2));
             InitializeReferenceCodes();
         }
     });
@@ -47,50 +47,23 @@ function CreateCLUESTable()
     var dynamodb = new AWS.DynamoDB();
     var params = {
         TableName : "CLUES",
-        KeySchema: [
-            { AttributeName: "reference", KeyType: "HASH" }
+        KeySchema : [
+            { AttributeName : "reference", KeyType : "HASH" }
         ],
         AttributeDefinitions: [
-            { AttributeName: "reference", AttributeType: "N" }
+            { AttributeName : "reference", AttributeType : "N" }
         ],
         ProvisionedThroughput: {
-            ReadCapacityUnits: 100, 
-            WriteCapacityUnits: 100
+            ReadCapacityUnits : 100, 
+            WriteCapacityUnits : 100
         }
     };
 
     dynamodb.createTable(params, function(err, data) {
         if (err) {
-            console.error("Unable to create table. Error JSON:", JSON.stringify(err, null, 2));
+            console.error("Unable to create CLUES table. Error JSON:", JSON.stringify(err, null, 2));
         } else {
-            console.log("Created table. Table description JSON:", JSON.stringify(data, null, 2));
-        }
-    });
-}
-
-function CreateScreenshotsTable()
-{
-    console.log("Initializing SCREENSHOTS table...");
-    var dynamodb = new AWS.DynamoDB();
-    var params = {
-        TableName : "SCREENSHOTS",
-        KeySchema: [
-            { AttributeName: "reference", KeyType: "HASH" }
-        ],
-        AttributeDefinitions: [
-            { AttributeName: "reference", AttributeType: "N" }
-        ],
-        ProvisionedThroughput: {
-            ReadCapacityUnits: 100, 
-            WriteCapacityUnits: 100
-        }
-    };
-
-    dynamodb.createTable(params, function(err, data) {
-        if (err) {
-            console.error("Unable to create table. Error JSON:", JSON.stringify(err, null, 2));
-        } else {
-            console.log("Created table. Table description JSON:", JSON.stringify(data, null, 2));
+            console.log("Created CLUES table. Table description JSON:", JSON.stringify(data, null, 2));
         }
     });
 }
@@ -104,8 +77,8 @@ function InitializeReferenceCodes()
     var imagecode = 0;
 
     var params = {
-        TableName:table,
-        Item:{
+        TableName : table,
+        Item : {
                 "title" : title,
                 "referencecode" : cluecode,
                 "imagecode" : imagecode
@@ -116,9 +89,9 @@ function InitializeReferenceCodes()
     console.log("Initializing Reference Codes...");
     docClient.put(params, function(err, data) {
         if (err) {
-            console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+            console.error("Unable to put item into " + table + " table. Error JSON:", JSON.stringify(err, null, 2));
         } else {
-            console.log("Added item:", JSON.stringify(data, null, 2));
+            console.log("Existing items:", JSON.stringify(data, null, 2));
         }
     });
 }
