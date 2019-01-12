@@ -19,7 +19,7 @@ server.on('connection', (socket) => {
 		var i = clients.indexOf(socket);
 		clients.splice(i, 1);
 	});
-	socket.clueHandler.send('socket', socket);	//Handles clue sending.
+	socket.clueHandler.send('socket', socket);
 	socket.clueHandler.on('message', (type, complete) =>
 	{
 		if (type == 'socket')
@@ -27,6 +27,7 @@ server.on('connection', (socket) => {
 			if (complete)
 			{
 				complete.on('end', function () {
+					console.log("Client with namecard " + socket.namecard + " disconnected...");
 					socket.clueHandler.kill();
 					var i = clients.indexOf(socket);
 					clients.splice(i, 1);

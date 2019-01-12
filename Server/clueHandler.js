@@ -81,13 +81,13 @@ screenshotHandler.on('message', (type, socket) =>
 					else
 					{
 						socket.write("clue-count-mismatch");
-						EndClueSending(socket);
+						EndClueSendingError(socket);
 					}
 				}
 				else
 				{
 					socket.write("incorrect-connection-format");
-					EndClueSending(socket);
+					EndClueSendingError(socket);
 				}
 			});
 			socket.write("ready-for-next-segment");
@@ -96,13 +96,11 @@ screenshotHandler.on('message', (type, socket) =>
 });
 
 locationHandler.on('exit', function (code, signal) {
-	console.log("Process terminated unexpectedly!");
-	EndClueSending(null);
+	EndClueSendingError(null);
 });
 
 screenshotHandler.on('exit', function (code, signal) {
-	console.log("Process terminated unexpectedly!");
-	EndClueSending(null);
+	EndClueSendingError(null);
 });
 
 function StoreClues(locations, screenshots, socket)
@@ -142,7 +140,20 @@ function EndClueSending(socket)
 	rimraf.sync(__dirname + '/' + screenshotHandler.pid);
 	console.log("Removed local locations files from: " + __dirname + '/' + locationHandler.pid);
 	console.log("Removed local screenshots files from: " + __dirname + '/' + screenshotHandler.pid);
+	console.log("Clue handling ended!!!");
 	locationHandler.kill();
 	screenshotHandler.kill();
+	process.send('socket', socket);
+}
+
+function EndClueSendingError(socket)
+{
+	rimraf.sync(__dirname + '/' + locationHandler.pid);
+	rimraf.sync(__dirname + '/' + screenshotHandler.pid);
+	console.log("Removed local locations files from: " + __dirname + '/' + locationHandler.pid);
+	console.log("Removed local screenshots files from: " + __dirname + '/' + screenshotHandler.pid);
+	locationHandler.kill();
+	screenshotHandler.kill();
+	console.log("Clue handling terminated unexpectedly!");
 	process.send('socket', socket);
 }
